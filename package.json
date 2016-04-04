@@ -1,5 +1,5 @@
 {
-  "name": "serverless-eshint-plugin",
+  "name": "serverless-eslint-plugin",
   "version": "0.0.1",
   "description": "Serverless ESHint Plugin - Detect errors and potential problems in your Lambda functions",
   "main": "src/index.js",
