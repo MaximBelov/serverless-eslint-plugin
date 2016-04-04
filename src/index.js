@@ -11,6 +11,7 @@ module.exports = function(S) {
         SError = require(S.getServerlessPath('Error')),
         chalk = require('chalk'),
         eslint = require('eslint').linter,
+        decomment = require('decomment'),
         readFile = Promise.promisify(require('fs').readFile),
         util = require('util');
 
@@ -100,7 +101,7 @@ module.exports = function(S) {
         _getConfig() {
             return readFile(S.getProject().getRootPath('.eslintrc'), 'utf-8')
                 .then(config => {
-                    return JSON.parse(config);
+                    return JSON.parse(decomment(config));
                 })
                 .catch(err => {
                     return {};
