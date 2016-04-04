@@ -53,7 +53,7 @@ module.exports = function(S) {
                             this.log(chalk.bold.red('Error! - Linting errors found.'));
                             err.forEach(error => {
                                 let type = error.severity === 1 ? "Warning" : "Error";
-                                this.log(chalk.red(util.format("%d:$d %s: %s", error.line, error.column, type, error.message)));
+                                this.log(chalk.red(util.format("%d:%d %s: %s", error.line, error.column, type, error.message)));
 
                             });
                         });
