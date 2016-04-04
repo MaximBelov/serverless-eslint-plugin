@@ -8,13 +8,13 @@ const path = require('path'),
 
 chai.use(chaiAsPromised);
 
-let s, plugin, logs, JSHintPlugin;
+let s, plugin, logs, ESLintPlugin;
 
 const logger = function(log) {
   logs.push(log);
 };
 
-describe('ServerlessJSHint', function() {
+describe('ServerlessESLint', function() {
   beforeEach(function(done) {
     this.timeout(0);
 
@@ -22,8 +22,8 @@ describe('ServerlessJSHint', function() {
     logs = [];
 
     s.init().then(function() {
-      JSHintPlugin = require('..')(s);
-      plugin = new JSHintPlugin({ logger: logger });
+      ESLintPlugin = require('..')(s);
+      plugin = new ESLintPlugin({ logger: logger });
 
       s.addPlugin(plugin);
       s.config.projectPath = path.join(__dirname, 'test-prj');
@@ -44,20 +44,20 @@ describe('ServerlessJSHint', function() {
 
   describe('#getName()', function() {
     it('should return the correct name', function() {
-      JSHintPlugin.getName().should.equal('com.joostfarla.ServerlessJSHint');
+      ESLintPlugin.getName().should.equal('com.nishant.ServerlessESLint');
     });
   });
 
   describe('#registerActions()', function() {
     it('should register actions', function() {
-      s.actions.should.have.property('functionJSHint');
-      s.actions.functionJSHint.should.be.a('function');
+      s.actions.should.have.property('functionESLint');
+      s.actions.functionESLint.should.be.a('function');
     });
   });
 
-  describe('#functionJSHint()', function() {
+  describe('#functionESLint()', function() {
     it('should fail for non-existing functions', function() {
-      return plugin.functionJSHint({ options: { names: ['someFunction'] }}).should.be.rejected.then(function() {
+      return plugin.functionESLint({ options: { names: ['someFunction'] }}).should.be.rejected.then(function() {
         logs.should.be.empty;
       });
     });
@@ -65,7 +65,7 @@ describe('ServerlessJSHint', function() {
     it('should succeed for valid functions', function() {
       _bootstrapFunction('validNodeFunction', 'nodejs');
 
-      return plugin.functionJSHint({ options: { names: ['validNodeFunction'] }}).should.be.fulfilled.then(function() {
+      return plugin.functionESLint({ options: { names: ['validNodeFunction'] }}).should.be.fulfilled.then(function() {
         logs[0].should.contain('Success!');
       });
     });
@@ -73,8 +73,8 @@ describe('ServerlessJSHint', function() {
     it('should report errors for invalid functions', function() {
       _bootstrapFunction('invalidNodeFunction', 'nodejs');
 
-      return plugin.functionJSHint({ options: { names: ['invalidNodeFunction'] }}).should.be.fulfilled.then(function() {
-        logs[0].should.contain('Error!');
+      return plugin.functionESLint({ options: { names: ['invalidNodeFunction'] }}).should.be.fulfilled.then(function() {
+       logs[0].should.contain('Error!');
       });
     });
 
@@ -82,7 +82,7 @@ describe('ServerlessJSHint', function() {
       s.config.projectPath = path.join(__dirname, 'test-prj-2');
       _bootstrapFunction('curlyFunction', 'nodejs');
 
-      return plugin.functionJSHint({ options: { names: ['curlyFunction'] }}).should.be.fulfilled.then(function() {
+      return plugin.functionESLint({ options: { names: ['curlyFunction'] }}).should.be.fulfilled.then(function() {
         logs[0].should.contain('Error!');
       });
     });
@@ -90,7 +90,7 @@ describe('ServerlessJSHint', function() {
     it('should fail on non-Node components', function() {
       _bootstrapFunction('pythonFunction', 'python2.7');
 
-      return plugin.functionJSHint({ options: { names: ['pythonFunction'] }}).should.be.rejected;
+      return plugin.functionESLint({ options: { names: ['pythonFunction'] }}).should.be.rejected;
     });
   });
 });
