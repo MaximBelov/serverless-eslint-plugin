@@ -1,8 +1,6 @@
 'use strict';
 
-/**
- * Serverless CORS Plugin
- */
+
 module.exports = function(S) {
     const _ = require('lodash'),
         path = require('path'),
