@@ -78,6 +78,16 @@ describe('ServerlessESLint', function() {
       });
     });
 
+    it('should work on more than one functions', function() {
+      _bootstrapFunction('invalidNodeFunction', 'nodejs');
+      _bootstrapFunction('validNodeFunction', 'nodejs');
+
+
+      return plugin.functionESLint({ options: { names: ['invalidNodeFunction','validNodeFunction'] }}).should.be.fulfilled.then(function() {
+       logs[0].should.contain('Error!');
+      });
+    });
+
     it('should apply a custom configuration file', function() {
       s.config.projectPath = path.join(__dirname, 'test-prj-2');
       _bootstrapFunction('curlyFunction', 'nodejs');

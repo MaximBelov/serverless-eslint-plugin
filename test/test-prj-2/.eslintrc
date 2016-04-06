@@ -1,10 +1,5 @@
+// Use this file as a starting point for your project's .eslintrc.
+// Copy this file, and add rule overrides as needed.
 {
-   //this is a block comment
-   
-   "rules": {
-   /*
-	* this is multiline comment
-   */
-        "curly": 1
-    }
+  "extends": "../../node_modules/eslint-config-airbnb/index.js"
 }

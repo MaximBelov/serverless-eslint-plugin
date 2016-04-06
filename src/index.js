@@ -8,9 +8,7 @@ module.exports = function(S) {
         SCli = require(S.getServerlessPath('utils/cli')),
         SError = require(S.getServerlessPath('Error')),
         chalk = require('chalk'),
-        eslint = require('eslint').linter,
-        decomment = require('decomment'),
-        readFile = Promise.promisify(require('fs').readFile),
+        CLIEngine = require("eslint").CLIEngine,
         util = require('util');
 
     class ServerlessESLint extends S.classes.Plugin {
@@ -49,11 +47,18 @@ module.exports = function(S) {
                         })
                         .catch(err => {
                             this.log(chalk.bold.red('Error! - Linting errors found.'));
-                            err.forEach(error => {
-                                let type = error.severity === 1 ? "Warning" : "Error";
-                                this.log(chalk.red(util.format("%d:%d %s: %s", error.line, error.column, type, error.message)));
-
-                            });
+                            if(err && err.results){
+                                err.results.forEach(func =>{
+                                    if(func.warningCount + func.errorCount > 0 ){
+                                        this.log(chalk.red(util.format("In file %s", func.filePath)));
+                                        func.messages.forEach(error =>{
+                                            let type = error.severity === 1 ? "Warning" : "Error";
+                                            this.log(chalk.red(util.format("%d:%d %s: %s", error.line, error.column, type, error.message)));
+                                        });
+                                    }
+                                });
+                            }
+                       
                         });
                 });
         }
@@ -73,38 +78,21 @@ module.exports = function(S) {
         }
 
         _lint(functions) {
-            return Promise.each(functions, func => {
-                const file = func.getRootPath(func.handler.split('/').pop().split('.')[0] + '.js');
-
-                return this._getConfig()
-                    .then(config => {
-                        return readFile(file, 'utf-8')
-                            .then(data => {
-                                const result = eslint.verify(data, _.merge({
-                                    "env": {
-                                        "node": true
-                                    }
-                                }, config));
-
-                                if (result.length > 0) {
-                                    return Promise.reject(result);
-                                }
-
-                                return Promise.resolve();
-                            });
-                    });
-            });
-        }
-
-        _getConfig() {
-            return readFile(S.getProject().getRootPath('.eslintrc'), 'utf-8')
-                .then(config => {
-                    return JSON.parse(decomment(config));
-                })
-                .catch(err => {
-                    return {};
+                const files= _.map(functions, func => {
+                    return func.getRootPath(func.handler.split('/').pop().split('.')[0] + '.js');
                 });
+                
+                let cli = new CLIEngine({
+                                configFile : S.utils.fileExistsSync(S.getProject().getRootPath('.eslintrc'))?S.getProject().getRootPath('.eslintrc'):""
+                            });
+                const result  =  cli.executeOnFiles(files);
+                if (result.errorCount + result.warningCount > 0) {
+                        return Promise.reject(result);
+                    }
+
+                return Promise.resolve();
         }
+
     }
 
     return ServerlessESLint;

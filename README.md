@@ -1,7 +1,7 @@
 # Serverless ESLint Plugin
 
 A Serverless Plugin for the [Serverless Framework](http://www.serverless.com) which
-adds support for [ESLint](http://http://eslint.org/) linting.
+adds support for [ESLint](http://eslint.org/) linting.
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![npm version](https://badge.fury.io/js/serverless-eslint-plugin.svg)](https://badge.fury.io/js/serverless-eslint-plugin)
@@ -41,21 +41,6 @@ serverless function eslint someFunction someOtherFunction
 ```
 
 To apply custom configuration, add a `.eslintrc` file in the project root.
-
-In .eslintrc file use the following convention
-
- ```
-    {
-       "key": value 
-    }
-```
-instead of 
-```
-  {
-    key:value
-  }  
-```
-
 
 
 Note :- This project is based on [serverless-jshint-plugin](https://github.com/joostfarla/serverless-jshint-plugin)
