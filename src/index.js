@@ -68,7 +68,7 @@ module.exports = function(S) {
                 return Promise.resolve(_.map(names, name => {
                     const func = S.getProject().getFunction(name);
                     if (!func) throw new SError(`Function "${name}" doesn't exist in your project`);
-                    if (func.runtime !== 'nodejs') throw new SError('ESLint does not support runtimes other than "nodejs".');
+                    if ((func.runtime !== 'nodejs') && (func.runtime !== 'nodejs4.3') ) throw new SError('ESLint does not support runtimes other than "nodejs".');
                     return func;
                 }));
             } catch (err) {

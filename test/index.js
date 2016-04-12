@@ -70,6 +70,16 @@ describe('ServerlessESLint', function() {
       });
     });
 
+    it('should succeed for valid functions for node 4.3', function() {
+      _bootstrapFunction('validNodeFunction', 'nodejs4.3');
+
+      return plugin.functionESLint({ options: { names: ['validNodeFunction'] }}).should.be.fulfilled.then(function() {
+        logs[0].should.contain('Success!');
+      });
+    });
+
+    
+
     it('should report errors for invalid functions', function() {
       _bootstrapFunction('invalidNodeFunction', 'nodejs');
 
