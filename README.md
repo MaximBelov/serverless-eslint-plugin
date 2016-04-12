@@ -46,3 +46,7 @@ To apply custom configuration, add a `.eslintrc` file in the project root.
 Note :- This project is based on [serverless-jshint-plugin](https://github.com/joostfarla/serverless-jshint-plugin)
 
 ISC License. See the [LICENSE](LICENSE) file.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/nishantjain91/serverless-eslint-plugin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
