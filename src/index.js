@@ -33,7 +33,10 @@ class ServerlessESLint {
         };
 
         this.hooks = {
-            'eslint:functions': this.functionESLint.bind(this)
+            'eslint:functions': this.functionESLint.bind(this),
+            'before:offline:start:init': this.functionESLint.bind(this),
+            'webpack:compile:watch:compile':this.functionESLint.bind(this),
+            'before:package:createDeploymentArtifacts':this.functionESLint.bind(this)
         };
 
     }
