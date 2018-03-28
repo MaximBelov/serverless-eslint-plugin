@@ -26,7 +26,7 @@ class ServerlessESLint {
                     function: {
                         usage: 'Specify the function you want to check (e.g. "-f myFunction")',
                         shortcut: 'f',
-                        required: true
+                         // required: true
                     }
                 }
             },
